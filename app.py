@@ -89,10 +89,9 @@ def index():
     # render web page with plotly graphs
     return render_template('master.html')
 
-@app.route('/results', methods=['GET','POST'])
+@app.route('/results', methods=['POST'])
 def results():
     data = request.get_json()
-    print(data)
     df_511 = pd.DataFrame(index=[0])
     df_511['create_time'] = pd.to_datetime(data['create_date'] +' '+ data['create_time'])
     df_511['close_time'] = pd.to_datetime(data['close_date'] +' '+ data['close_time'])
@@ -182,7 +181,6 @@ def results():
             df_511_clustering['create_time_weekend_1'] = 1
 
     clustering_result = model.predict(df_511_clustering[columns])
-    print(clustering_result)
     polygon = buffer_segment(LineString(data['coords']))
     gdf_511 = gpd.GeoDataFrame(df_511[['duration',
                                         'peak_duration',
